@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Gasheizung und Wärmepumpe mit eigenen Heizkostenannahmen vergleichen.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Wärmekostenrechner | EBF Energieberatung – Entwurf</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --green: #3d5e10;
+        --green-bright: #61aa1d;
+        --green-pale: #f1f6eb;
+        --ink: #343936;
+        --muted: #6a706d;
+        --line: #e1e5df;
+        --paper: #fff;
+        --soft: #f7f8f6;
+        --shadow: 0 5px 20px rgba(37, 52, 31, .08);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+      body { margin: 0; color: var(--ink); background: var(--paper); font-family: Arial, Helvetica, sans-serif; font-size: 15px; line-height: 1.65; }
+      button, input { font: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+      a { color: var(--green); }
+      a:hover { color: var(--green-bright); }
+      .container { width: min(100% - 3rem, 1320px); margin-inline: auto; }
+      .contact-strip { min-height: 31px; background: #f7f7f7; color: #555b58; font-size: 12px; }
+      .contact-strip .container { display: flex; min-height: 31px; align-items: center; justify-content: flex-end; gap: 22px; }
+      .contact-strip a { color: inherit; text-decoration: none; }
+      .contact-strip a:hover { color: var(--green); text-decoration: underline; }
+      .contact-item { white-space: nowrap; }
+      .site-header { position: sticky; z-index: 20; top: 0; background: rgba(255,255,255,.98); box-shadow: 0 2px 8px rgba(0,0,0,.045); }
+      .header-inner { display: flex; min-height: 101px; align-items: center; justify-content: space-between; gap: 25px; }
+      .brand { display: inline-flex; flex: 0 0 220px; align-items: center; }
+      .brand img { display: block; width: 220px; max-width: 100%; height: auto; }
+      .nav-area { display: flex; min-width: 0; align-items: center; justify-content: flex-end; gap: 23px; }
+      .primary-nav { display: flex; align-items: center; justify-content: flex-end; gap: clamp(11px, 1.35vw, 23px); }
+      .primary-nav a { position: relative; display: inline-flex; min-height: 46px; align-items: center; color: #383d39; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+      .primary-nav a:hover, .primary-nav a[aria-current="page"] { color: var(--green); }
+      .primary-nav a[aria-current="page"]::after { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; background: var(--green-bright); content: ""; }
+      .request-link { display: inline-flex; min-height: 42px; align-items: center; justify-content: center; padding: 8px 14px; border-radius: 3px; background: var(--green); color: white; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .request-link:hover { background: #507b18; color: white; }
+      .menu-toggle { display: none; width: 46px; height: 42px; border: 1px solid var(--line); border-radius: 3px; background: white; color: var(--green); font-size: 23px; line-height: 1; }
+      .hero { margin-top: 0; }
+      .hero-image { display: block; width: min(100% - 3rem, 1320px); aspect-ratio: 3 / 1; margin: 0 auto; overflow: hidden; border-radius: 4px; background: #edf0ec; }
+      .hero-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      .article { max-width: 1160px; margin-inline: auto; }
+      .intro { padding: 46px 0 35px; }
+      .kicker { margin: 0 0 8px; color: var(--green-bright); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+      h1, h2, h3 { color: var(--green); font-family: Arial, Helvetica, sans-serif; line-height: 1.22; }
+      h1 { margin: 0 0 18px; font-size: clamp(31px, 4vw, 43px); font-weight: 700; }
+      h2 { margin: 0 0 18px; font-size: clamp(27px, 3vw, 36px); font-weight: 700; }
+      h3 { margin: 0 0 9px; color: #4e7521; font-size: 20px; }
+      p { margin: 0 0 17px; }
+      .lead { max-width: 980px; color: #4e5551; font-size: 17px; }
+      .intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 23px; }
+      .text-link { font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+      .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border: 1px solid var(--green); border-radius: 3px; background: var(--green); color: white; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; }
+      .button:hover { border-color: #507b18; background: #507b18; color: white; }
+      .button-outline { background: white; color: var(--green); }
+      .button-outline:hover { background: var(--green-pale); color: var(--green); }
+      .section { padding: 34px 0 52px; border-top: 1px solid #eef0ed; }
+      .section-heading { max-width: 950px; margin-bottom: 25px; }
+      .section-heading p { max-width: 900px; color: var(--muted); }
+      .notice { display: flex; align-items: flex-start; gap: 13px; margin: 22px 0 24px; padding: 16px 19px; border-left: 4px solid var(--green-bright); background: var(--green-pale); color: #4c5845; font-size: 14px; }
+      .notice-mark { display: grid; width: 22px; height: 22px; flex: 0 0 22px; place-items: center; border-radius: 50%; background: #dfead2; color: var(--green); font-weight: 800; }
+      .notice p { margin: 0; }
+      .calculator-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(360px, .88fr); align-items: start; gap: 25px; }
+      .panel { border: 1px solid #e4e8e2; border-radius: 4px; background: white; box-shadow: var(--shadow); }
+      .form-panel { padding: 26px; }
+      .panel-heading { margin-bottom: 17px; }
+      .panel-heading h2 { margin: 0 0 6px; font-size: 26px; }
+      .panel-heading p { margin: 0; color: var(--muted); font-size: 14px; }
+      .step { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 13px; padding: 20px 0; border-top: 1px solid var(--line); }
+      .step-number { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--green); color: white; font-size: 13px; font-weight: 700; }
+      .step-content h3 { margin: 1px 0 4px; font-size: 17px; }
+      .step-description { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+      .fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px 15px; }
+      .field { min-width: 0; }
+      .field label { display: block; margin-bottom: 5px; color: #3d433f; font-size: 13px; font-weight: 700; line-height: 1.35; }
+      .input-wrap { position: relative; }
+      .input-wrap input { width: 100%; min-height: 43px; padding: 9px 70px 9px 11px; border: 1px solid #cdd3ce; border-radius: 3px; outline: none; background: white; color: var(--ink); font-variant-numeric: tabular-nums; }
+      .input-wrap input:focus { border-color: var(--green-bright); box-shadow: 0 0 0 3px rgba(97,170,29,.15); }
+      .input-wrap input:invalid { border-color: #bd4b3c; }
+      .unit { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); color: #69716b; font-size: 12px; pointer-events: none; }
+      .hint { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .form-actions { display: flex; flex-wrap: wrap; gap: 9px; padding-top: 17px; border-top: 1px solid var(--line); }
+      .form-actions .button { min-height: 41px; padding: 8px 12px; font-size: 12px; }
+      .results-panel { position: sticky; top: 121px; overflow: hidden; }
+      .results-head { padding: 22px 24px 19px; background: var(--green); color: white; }
+      .results-head .kicker { margin: 0 0 5px; color: #c5dfa6; font-size: 11px; }
+      .results-head h2 { margin: 0 0 5px; color: white; font-size: 25px; }
+      .results-head p { margin: 0; color: #e6eddf; font-size: 13px; }
+      .result-body { padding: 20px 23px 23px; }
+      .winner { display: flex; gap: 10px; margin-bottom: 15px; padding: 12px; border: 1px solid #d5e4cc; background: #f5f9f1; color: #3d5030; }
+      .winner-icon { display: grid; width: 24px; height: 24px; flex: 0 0 24px; place-items: center; border-radius: 50%; background: #e4efd9; color: var(--green); font-weight: 800; }
+      .winner p { margin: 0; font-size: 12px; }
+      .winner strong { display: block; margin-bottom: 2px; font-size: 14px; }
+      .system-card { padding: 15px 0; border-top: 1px solid var(--line); }
+      .system-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+      .system-title h3 { margin: 0; font-size: 17px; }
+      .total { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .total small { color: var(--muted); font-size: 11px; font-weight: 600; }
+      .bar-track { height: 8px; overflow: hidden; margin: 0 0 11px; border-radius: 50px; background: #edf0eb; }
+      .bar { width: 0; height: 100%; min-width: 2px; border-radius: inherit; background: var(--green-bright); transition: width .2s ease; }
+      .bar.gas { background: #8b918a; }
+      .breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 12px; margin: 0; }
+      .breakdown div { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 11px; }
+      .breakdown dt, .breakdown dd { margin: 0; }
+      .breakdown dd { color: var(--ink); font-variant-numeric: tabular-nums; text-align: right; }
+      .specific-output { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 12px; }
+      .specific-output strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+      .compare-note { margin: 4px 0 13px; color: var(--muted); font-size: 12px; }
+      .result-actions { display: flex; justify-content: flex-end; padding-top: 12px; border-top: 1px solid var(--line); }
+      .result-actions .button { min-height: 37px; padding: 7px 11px; font-size: 12px; }
+      .method { margin-top: 16px; border: 1px solid var(--line); background: #fafbf9; }
+      .method summary { padding: 12px; color: var(--green); cursor: pointer; font-size: 13px; font-weight: 700; }
+      .method-content { padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
+      .method-content p:last-child { margin-bottom: 0; }
+      .method-content ul { padding-left: 19px; }
+      .privacy { margin: 13px 0 0; color: var(--muted); font-size: 11px; text-align: center; }
+      .feature-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-top: 25px; }
+      .feature { padding: 19px; border: 1px solid var(--line); background: #fff; }
+      .feature h3 { margin-bottom: 7px; font-size: 17px; }
+      .feature p { margin: 0; color: var(--muted); font-size: 13px; }
+      .faq-list { border-top: 1px solid var(--line); }
+      .faq-list details { border-bottom: 1px solid var(--line); }
+      .faq-list summary { position: relative; padding: 17px 42px 17px 0; color: var(--green); cursor: pointer; font-size: 16px; font-weight: 700; list-style: none; }
+      .faq-list summary::-webkit-details-marker { display: none; }
+      .faq-list summary::after { position: absolute; top: 14px; right: 6px; color: var(--green-bright); content: "+"; font-size: 24px; font-weight: 400; }
+      .faq-list details[open] summary::after { content: "−"; }
+      .faq-answer { max-width: 950px; padding: 0 20px 15px 0; color: #555d58; font-size: 14px; }
+      .faq-answer p:last-child { margin-bottom: 0; }
+      .contact-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 5px 0 55px; padding: 25px 28px; background: #f4f7f1; }
+      .contact-card h2 { margin: 0 0 7px; font-size: 24px; }
+      .contact-card p { margin: 0; color: #5e665f; font-size: 14px; }
+      .contact-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .site-footer { background: #f4f5f3; color: #626862; }
+      .footer-main { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 35px; padding: 36px 0 31px; }
+      .footer-logo { width: 176px; height: auto; margin-bottom: 13px; }
+      .footer-main h2 { margin: 0 0 10px; color: #3e493e; font-size: 15px; }
+      .footer-main p, .footer-main address { margin: 0; color: #666d67; font-size: 12px; font-style: normal; }
+      .footer-links { display: grid; gap: 5px; }
+      .footer-links a { color: #5d665d; font-size: 12px; text-decoration: none; }
+      .footer-links a:hover { color: var(--green); text-decoration: underline; }
+      .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 13px 0; border-top: 1px solid #dedfdc; font-size: 11px; }
+      .footer-bottom p { margin: 0; }
+      .footer-legal { display: flex; flex-wrap: wrap; gap: 17px; }
+      .footer-legal a { color: inherit; text-decoration: none; }
+      .footer-legal a:hover { color: var(--green); text-decoration: underline; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+      @media (max-width: 1120px) {
+        .container { width: min(100% - 2.2rem, 1320px); }
+        .hero-image { width: min(100% - 2.2rem, 1320px); }
+        .brand { flex-basis: 185px; }
+        .brand img { width: 185px; }
+        .nav-area { gap: 13px; }
+        .primary-nav { gap: 12px; }
+        .primary-nav a { font-size: 12px; }
+        .request-link { padding-inline: 10px; font-size: 11px; }
+        .article { width: min(100% - 3rem, 1160px); }
+      }
+      @media (max-width: 900px) {
+        .header-inner { min-height: 79px; }
+        .brand, .brand img { width: 185px; flex-basis: 185px; }
+        .menu-toggle { display: inline-grid; flex: 0 0 46px; place-items: center; }
+        .nav-area { position: absolute; top: 100%; right: 0; left: 0; display: none; align-items: stretch; padding: 10px 1.1rem 18px; border-top: 1px solid var(--line); background: white; box-shadow: 0 8px 12px rgba(0,0,0,.08); }
+        .nav-area.is-open { display: flex; flex-direction: column; }
+        .primary-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+        .primary-nav a { min-height: 44px; border-bottom: 1px solid #eef0ed; font-size: 14px; }
+        .primary-nav a[aria-current="page"]::after { right: auto; width: 40px; }
+        .request-link { align-self: flex-start; margin-top: 10px; padding: 10px 15px; font-size: 13px; }
+        .calculator-grid { grid-template-columns: minmax(0,1fr) minmax(320px,.92fr); gap: 15px; }
+        .form-panel { padding: 20px; }
+        .results-head { padding-inline: 19px; }
+        .result-body { padding-inline: 18px; }
+      }
+      @media (max-width: 720px) {
+        .contact-strip .container { justify-content: center; gap: 14px; }
+        .contact-item:last-child { display: none; }
+        .container { width: min(100% - 2rem, 1320px); }
+        .hero-image { width: 100%; aspect-ratio: 3 / 1; border-radius: 0; }
+        .hero-image img { object-position: center; }
+        .article { width: min(100% - 2rem, 1160px); }
+        .intro { padding: 33px 0 29px; }
+        .lead { font-size: 15px; }
+        .calculator-grid { grid-template-columns: 1fr; }
+        .results-panel { position: static; }
+        .feature-grid { grid-template-columns: 1fr; gap: 11px; }
+        .contact-card { align-items: flex-start; flex-direction: column; margin-bottom: 35px; padding: 20px; }
+        .footer-main { grid-template-columns: 1fr 1fr; gap: 24px; }
+        .footer-about { grid-column: 1 / -1; }
+        .footer-bottom { align-items: flex-start; flex-direction: column; }
+      }
+      @media (max-width: 480px) {
+        .contact-strip { font-size: 11px; }
+        .contact-strip .container { gap: 9px; }
+        .header-inner { min-height: 68px; }
+        .brand, .brand img { width: 155px; flex-basis: 155px; }
+        .primary-nav { grid-template-columns: 1fr; }
+        .primary-nav a { min-height: 42px; }
+        .hero-image { aspect-ratio: 2.15 / 1; }
+        .intro { padding-top: 28px; }
+        h1 { font-size: 30px; }
+        h2 { font-size: 26px; }
+        .section { padding: 28px 0 38px; }
+        .form-panel { padding: 15px; }
+        .step { grid-template-columns: 24px minmax(0,1fr); gap: 9px; padding: 16px 0; }
+        .step-number { width: 24px; height: 24px; }
+        .fields { grid-template-columns: 1fr; gap: 10px; }
+        .results-head { padding: 18px; }
+        .result-body { padding: 16px; }
+        .breakdown { grid-template-columns: 1fr; }
+        .system-title { align-items: flex-start; flex-direction: column; gap: 2px; }
+        .form-actions .button { flex: 1 1 100%; }
+        .footer-main { grid-template-columns: 1fr; }
+        .footer-about { grid-column: auto; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
+      @media print {
+        .contact-strip, .site-header, .intro-actions, .form-actions, .result-actions, .contact-card, .site-footer { display: none !important; }
+        .container, .article, .hero-image { width: 100%; }
+        .hero-image { aspect-ratio: 3 / 1; }
+        .section { padding-block: 18px; }
+        .calculator-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+        .results-panel { position: static; }
+        .panel { box-shadow: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contact-strip">
+      <div class="container">
+        <a class="contact-item" href="tel:+4957159641771">☎ &nbsp;0571 59 64 17 71</a>
+        <a class="contact-item" href="mailto:info@ebf-energieberatung.de">✉ &nbsp;info@ebf-energieberatung.de</a>
+        <span class="contact-item">Minden · Bielefeld · Hannover</span>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="https://www.ebf-energieberatung.de/" aria-label="EBF Energieberatung – Startseite">
+          <img src="assets/ebf-logo.svg" alt="EBF Energieberatung">
+        </a>
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="primaryNavigation">☰</button>
+        <div class="nav-area" id="primaryNavigation">
+          <nav class="primary-nav" aria-label="Hauptnavigation">
+            <a href="https://www.ebf-energieberatung.de/">Home</a>
+            <a href="https://www.ebf-energieberatung.de/leistungen/">Leistungen</a>
+            <a href="https://www.ebf-energieberatung.de/foerdermoeglichkeiten/">Fördermöglichkeiten</a>
+            <a href="https://www.ebf-energieberatung.de/kunden/">Kunden</a>
+            <a href="https://www.ebf-energieberatung.de/ueber-uns/">Über uns</a>
+            <a href="#calculator" aria-current="page">Wärmekostenrechner</a>
+            <a href="https://www.ebf-energieberatung.de/aktuelles/">Aktuelles</a>
+          </nav>
+          <a class="request-link" href="mailto:info@ebf-energieberatung.de?subject=Anfrage%20zum%20W%C3%A4rmekostenrechner">Angebotsanfrage</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Wärmekostenrechner">
+        <figure class="hero-image">
+          <img src="assets/waermekostenrechner-hero.png" alt="Wärmekostenrechner: Gasheizung und Wärmepumpe im Vergleich">
+        </figure>
+      </section>
+
+      <article class="article">
+        <section class="intro" aria-labelledby="page-title">
+          <p class="kicker">Heizkosten einfach vergleichen</p>
+          <h1 id="page-title">Gasheizung oder Wärmepumpe?</h1>
+          <p class="lead">Mit dem Wärmekostenrechner können Sie jährliche Kosten für Gasheizung und Wärmepumpe auf Basis eigener Annahmen gegenüberstellen. Passen Sie Wärmebedarf, Energiepreise, laufende Kosten und Angebote an und sehen Sie, wie sich die Angaben im vereinfachten Vergleich auswirken.</p>
+          <div class="intro-actions">
+            <a class="button" href="#calculator">Zum Wärmekostenrechner <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href="#rechenmodell">So funktioniert der Vergleich</a>
+          </div>
+          <aside class="notice" aria-label="Hinweis zum Entwurf">
+            <span class="notice-mark" aria-hidden="true">i</span>
+            <p><strong>Projektentwurf mit Beispielwerten:</strong> Der Rechner dient zur Orientierung. Das Ergebnis ist keine Energieberatung und ersetzt weder ein individuelles Angebot noch die Prüfung von Förderbedingungen oder technischen Voraussetzungen.</p>
+          </aside>
+        </section>
+
+        <section class="section" id="calculator" aria-labelledby="calculator-heading">
+          <div class="section-heading">
+            <p class="kicker">Wärmekostenrechner</p>
+            <h2 id="calculator-heading">Ihre Annahmen im direkten Vergleich</h2>
+            <p>Tragen Sie möglichst vergleichbare Werte ein. Die Berechnung aktualisiert sich direkt in Ihrem Browser; Ihre Eingaben werden nicht übertragen.</p>
+          </div>
+
+          <div class="calculator-grid">
+            <form class="panel form-panel" id="calculatorForm" novalidate>
+              <div class="panel-heading">
+                <h2>Angaben zum Gebäude und zu den Anlagen</h2>
+                <p>Die voreingestellten Werte sind Beispiele und können geändert werden.</p>
+              </div>
+
+              <section class="step" aria-labelledby="building-heading">
+                <span class="step-number" aria-hidden="true">1</span>
+                <div class="step-content">
+                  <h3 id="building-heading">Wärmebedarf und Effizienz</h3>
+                  <p class="step-description">Geben Sie den jährlichen Nutzwärmebedarf und Kennwerte der Heizsysteme ein.</p>
+                  <div class="fields">
+                    <div class="field">
+                      <label for="heatDemand">Jährlicher Nutzwärmebedarf</label>
+                      <div class="input-wrap"><input id="heatDemand" name="heatDemand" type="number" min="1000" max="200000" step="500" value="18000" inputmode="decimal" required><span class="unit">kWh/a</span></div>
+                      <span class="hint">Für Heizung und gegebenenfalls Warmwasser.</span>
+                    </div>
+                    <div class="field">
+                      <label for="gasEfficiency">Jahresnutzungsgrad Gasheizung</label>
+                      <div class="input-wrap"><input id="gasEfficiency" name="gasEfficiency" type="number" min="50" max="100" step="1" value="90" inputmode="decimal" required><span class="unit">%</span></div>
+                      <span class="hint">Beispielwert; Fachunterlagen verwenden.</span>
+                    </div>
+                    <div class="field">
+                      <label for="jaz">Jahresarbeitszahl Wärmepumpe</label>
+                      <div class="input-wrap"><input id="jaz" name="jaz" type="number" min="1" max="7" step="0.1" value="3" inputmode="decimal" required><span class="unit">JAZ</span></div>
+                      <span class="hint">Beispielannahme, abhängig von Gebäude und Anlage.</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="step" aria-labelledby="energy-heading">
+                <span class="step-number" aria-hidden="true">2</span>
+                <div class="step-content">
+                  <h3 id="energy-heading">Energiepreise und laufende Kosten</h3>
+                  <p class="step-description">Nutzen Sie Ihre aktuellen Tarife und jährlichen Fixkosten.</p>
+                  <div class="fields">
+                    <div class="field">
+                      <label for="gasPrice">Gas-Arbeitspreis inkl. Abgaben</label>
+                      <div class="input-wrap"><input id="gasPrice" name="gasPrice" type="number" min="0" max="2" step="0.01" value="0.12" inputmode="decimal" required><span class="unit">€/kWh</span></div>
+                    </div>
+                    <div class="field">
+                      <label for="electricityPrice">Strom-Arbeitspreis inkl. Abgaben</label>
+                      <div class="input-wrap"><input id="electricityPrice" name="electricityPrice" type="number" min="0" max="2" step="0.01" value="0.32" inputmode="decimal" required><span class="unit">€/kWh</span></div>
+                    </div>
+                    <div class="field">
+                      <label for="gasFixed">Fixkosten Gasheizung</label>
+                      <div class="input-wrap"><input id="gasFixed" name="gasFixed" type="number" min="0" max="20000" step="25" value="350" inputmode="decimal" required><span class="unit">€/Jahr</span></div>
+                      <span class="hint">Zum Beispiel Grundpreis, Wartung, Schornsteinfeger.</span>
+                    </div>
+                    <div class="field">
+                      <label for="hpFixed">Fixkosten Wärmepumpe</label>
+                      <div class="input-wrap"><input id="hpFixed" name="hpFixed" type="number" min="0" max="20000" step="25" value="300" inputmode="decimal" required><span class="unit">€/Jahr</span></div>
+                      <span class="hint">Zum Beispiel Wartung und Strom-Grundpreis.</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="step" aria-labelledby="investment-heading">
+                <span class="step-number" aria-hidden="true">3</span>
+                <div class="step-content">
+                  <h3 id="investment-heading">Angebote und Förderung</h3>
+                  <p class="step-description">Vergleichen Sie möglichst vollständige Angebote. Eine Förderung wird nur berücksichtigt, wenn Sie sie selbst eintragen.</p>
+                  <div class="fields">
+                    <div class="field">
+                      <label for="gasInvestment">Investition Gasheizung</label>
+                      <div class="input-wrap"><input id="gasInvestment" name="gasInvestment" type="number" min="0" max="500000" step="500" value="12000" inputmode="decimal" required><span class="unit">€</span></div>
+                    </div>
+                    <div class="field">
+                      <label for="hpInvestment">Investition Wärmepumpe</label>
+                      <div class="input-wrap"><input id="hpInvestment" name="hpInvestment" type="number" min="0" max="500000" step="500" value="30000" inputmode="decimal" required><span class="unit">€</span></div>
+                    </div>
+                    <div class="field">
+                      <label for="hpGrant">Angenommene Förderung</label>
+                      <div class="input-wrap"><input id="hpGrant" name="hpGrant" type="number" min="0" max="500000" step="500" value="0" inputmode="decimal" required><span class="unit">€</span></div>
+                      <span class="hint">Nur einen Betrag ansetzen, dessen Förderfähigkeit Sie geprüft haben.</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="step" aria-labelledby="period-heading">
+                <span class="step-number" aria-hidden="true">4</span>
+                <div class="step-content">
+                  <h3 id="period-heading">Betrachtungszeitraum</h3>
+                  <p class="step-description">Die Investitionen werden als jährliche Kosten über den Zeitraum verteilt.</p>
+                  <div class="fields">
+                    <div class="field">
+                      <label for="years">Nutzungsdauer</label>
+                      <div class="input-wrap"><input id="years" name="years" type="number" min="1" max="40" step="1" value="20" inputmode="numeric" required><span class="unit">Jahre</span></div>
+                    </div>
+                    <div class="field">
+                      <label for="interest">Kalkulationszins</label>
+                      <div class="input-wrap"><input id="interest" name="interest" type="number" min="0" max="30" step="0.5" value="5" inputmode="decimal" required><span class="unit">%</span></div>
+                      <span class="hint">Vereinfachte Beispielannahme zur Annualisierung.</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <div class="form-actions">
+                <button class="button" type="button" id="printButton">Drucken / als PDF speichern</button>
+                <button class="button button-outline" type="reset">Beispielwerte wiederherstellen</button>
+              </div>
+            </form>
+
+            <section class="panel results-panel" aria-labelledby="results-heading" aria-live="polite">
+              <div class="results-head">
+                <p class="kicker">Ihr Vergleich</p>
+                <h2 id="results-heading">Kosten pro Jahr</h2>
+                <p>Vereinfachte Vollkosten auf Basis Ihrer Eingaben</p>
+              </div>
+              <div class="result-body">
+                <div class="winner" id="winner" role="status">
+                  <span class="winner-icon" aria-hidden="true">i</span>
+                  <p><strong>Ergebnis wird berechnet …</strong><span>Bitte prüfen Sie Ihre Eingaben.</span></p>
+                </div>
+
+                <article class="system-card" aria-labelledby="gas-title">
+                  <div class="system-title"><h3 id="gas-title">Gasheizung</h3><div class="total"><span id="gasTotal">–</span> <small>€/Jahr</small></div></div>
+                  <div class="bar-track" aria-hidden="true"><div class="bar gas" id="gasBar"></div></div>
+                  <dl class="breakdown">
+                    <div><dt>Investition, annualisiert</dt><dd id="gasAnnualInvest">–</dd></div>
+                    <div><dt>Energiekosten</dt><dd id="gasEnergyCost">–</dd></div>
+                    <div><dt>Fixkosten</dt><dd id="gasFixedCost">–</dd></div>
+                    <div><dt>Gasbedarf</dt><dd id="gasConsumption">–</dd></div>
+                  </dl>
+                  <div class="specific-output"><span>Wärmekosten</span><strong id="gasHeatCost">–</strong></div>
+                </article>
+
+                <article class="system-card" aria-labelledby="hp-title">
+                  <div class="system-title"><h3 id="hp-title">Wärmepumpe</h3><div class="total"><span id="hpTotal">–</span> <small>€/Jahr</small></div></div>
+                  <div class="bar-track" aria-hidden="true"><div class="bar" id="hpBar"></div></div>
+                  <dl class="breakdown">
+                    <div><dt>Investition, annualisiert</dt><dd id="hpAnnualInvest">–</dd></div>
+                    <div><dt>Energiekosten</dt><dd id="hpEnergyCost">–</dd></div>
+                    <div><dt>Fixkosten</dt><dd id="hpFixedCost">–</dd></div>
+                    <div><dt>Strombedarf</dt><dd id="hpConsumption">–</dd></div>
+                  </dl>
+                  <div class="specific-output"><span>Wärmekosten</span><strong id="hpHeatCost">–</strong></div>
+                </article>
+
+                <p class="compare-note" id="periodTotal">Der Gesamtvergleich wird aus den jährlichen Kosten und dem gewählten Zeitraum abgeleitet.</p>
+                <div class="result-actions"><button class="button button-outline" type="button" id="resultPrintButton">Ergebnis drucken</button></div>
+
+                <details class="method" id="rechenmodell">
+                  <summary>Wie wird gerechnet?</summary>
+                  <div class="method-content">
+                    <p>Der Nutzwärmebedarf wird durch den Gas-Jahresnutzungsgrad beziehungsweise die JAZ geteilt. So werden Gas- und Stromverbrauch abgeleitet. Energie- und Fixkosten werden zu annualisierten Investitionskosten addiert.</p>
+                    <ul>
+                      <li>Die eingetragene Förderung wird von der Wärmepumpen-Investition abgezogen; mindestens 0 € bleiben anrechenbar.</li>
+                      <li>Der Kalkulationszins verteilt die Netto-Investition als Annuität über die gewählte Nutzungsdauer.</li>
+                      <li>Energiepreise und jährliche Fixkosten bleiben im gesamten Zeitraum konstant.</li>
+                    </ul>
+                    <p>Das Modell ist vereinfacht. Es berechnet keinen Gebäudebedarf nach DIN V 18599 und übernimmt nicht die Preiszeitreihen oder Technologien des EWI-Wärmekosten-Tools. Annahmen, Quellen und fachliche Regeln müssen vor einem späteren öffentlichen Einsatz geprüft werden.</p>
+                  </div>
+                </details>
+                <p class="privacy">Ihre Eingaben bleiben in dieser Vorschau in Ihrem Browser und werden nicht an einen Rechnerdienst gesendet.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="approach-heading">
+          <div class="section-heading">
+            <p class="kicker">Kosten transparent machen</p>
+            <h2 id="approach-heading">Was der Vergleich berücksichtigt</h2>
+            <p>Beide Systeme werden mit denselben Wärmebedarfsannahmen betrachtet. So lässt sich nachvollziehen, welchen Einfluss Energiepreis, Effizienz, Investition und laufende Kosten im Modell haben.</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature"><h3>Energiebedarf</h3><p>Der Nutzwärmebedarf wird anhand der eingegebenen Kennwerte in Gas- und Stromverbrauch umgerechnet.</p></article>
+            <article class="feature"><h3>Investition und Förderung</h3><p>Investitionskosten werden über die gewählte Laufzeit annualisiert. Eine Förderung zählt nur als selbst eingetragene Annahme.</p></article>
+            <article class="feature"><h3>Eigene Preisannahmen</h3><p>Arbeitspreise und jährliche Fixkosten können angepasst werden. Preisänderungen über die Jahre sind nicht abgebildet.</p></article>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="faq-heading">
+          <div class="section-heading">
+            <p class="kicker">Häufige Fragen</p>
+            <h2 id="faq-heading">Fragen zum Wärmekostenrechner</h2>
+          </div>
+          <div class="faq-list">
+            <details open>
+              <summary>Wie genau ist das Ergebnis?</summary>
+              <div class="faq-answer"><p>Das Ergebnis hängt vollständig von den eingegebenen Werten und den vereinfachten Annahmen ab. Es ist eine erste Orientierung und keine individuelle Prognose, technische Planung oder Energieberatung.</p></div>
+            </details>
+            <details>
+              <summary>Welche Werte sollte ich eintragen?</summary>
+              <div class="faq-answer"><p>Verwenden Sie nach Möglichkeit Ihren tatsächlichen Wärmebedarf, aktuelle Energiepreise sowie vergleichbare Komplettangebote. Die voreingestellten Werte sind lediglich Beispiele.</p></div>
+            </details>
+            <details>
+              <summary>Werden meine Eingaben gespeichert oder übertragen?</summary>
+              <div class="faq-answer"><p>Nein. In dieser Projektvorschau verarbeitet das Skript die Angaben ausschließlich lokal im Browser. Es gibt kein Kontaktformular und keine Verbindung zu einem Berechnungsdienst.</p></div>
+            </details>
+            <details>
+              <summary>Ist eine Förderung automatisch berücksichtigt?</summary>
+              <div class="faq-answer"><p>Nein. Im Rechner wird nur der Betrag abgezogen, den Sie selbst eingeben. Förderfähigkeit, Bedingungen und mögliche Änderungen werden nicht geprüft.</p></div>
+            </details>
+          </div>
+        </section>
+
+        <aside class="contact-card">
+          <div>
+            <h2>Fragen zur Heizungsplanung?</h2>
+            <p>Für eine individuelle Einschätzung wenden Sie sich an EBF Energieberatung.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="button" href="tel:+4957159641771">☎ &nbsp;0571 59 64 17 71</a>
+            <a class="button button-outline" href="mailto:info@ebf-energieberatung.de">E-Mail schreiben</a>
+          </div>
+        </aside>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-main">
+        <div class="footer-about">
+          <img class="footer-logo" src="assets/ebf-logo.svg" alt="EBF Energieberatung">
+          <p>Energieberatung einfach effizient.<br>Entwurf einer Wärmekostenrechner-Unterseite.</p>
+        </div>
+        <div>
+          <h2>Kontakt</h2>
+          <address>Minderheideweg 2<br>32425 Minden<br><a href="tel:+4957159641771">0571 59 64 17 71</a><br><a href="mailto:info@ebf-energieberatung.de">info@ebf-energieberatung.de</a></address>
+        </div>
+        <div>
+          <h2>Informationen</h2>
+          <div class="footer-links">
+            <a href="https://www.ebf-energieberatung.de/leistungen/">Leistungen</a>
+            <a href="https://www.ebf-energieberatung.de/foerdermittelrechner/">Fördermittelrechner</a>
+            <a href="https://www.ebf-energieberatung.de/">Über EBF</a>
+          </div>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>© EBF Energieberatung · Projektvorschau</p>
+        <nav class="footer-legal" aria-label="Rechtliche Hinweise">
+          <a href="https://www.ebf-energieberatung.de/impressum/">Impressum</a>
+          <a href="https://www.ebf-energieberatung.de/datenschutz/">Datenschutz</a>
+          <a href="https://www.ebf-energieberatung.de/agb">AGB</a>
+          <a href="https://www.ebf-energieberatung.de/widerruf">Widerrufsbelehrung</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      (() => {
+        const form = document.getElementById("calculatorForm");
+        const euro = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+        const number = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 0 });
+        const decimal = new Intl.NumberFormat("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        const read = (name) => Number(form.elements[name].value);
+        const setText = (id, value) => { document.getElementById(id).textContent = value; };
+
+        function capitalRecoveryFactor(rate, years) {
+          if (rate === 0) return 1 / years;
+          return rate / (1 - Math.pow(1 + rate, -years));
+        }
+
+        function update() {
+          const heat = read("heatDemand");
+          const gasEfficiency = read("gasEfficiency") / 100;
+          const jaz = read("jaz");
+          const gasPrice = read("gasPrice");
+          const electricityPrice = read("electricityPrice");
+          const gasInvestment = read("gasInvestment");
+          const hpInvestment = read("hpInvestment");
+          const hpGrant = read("hpGrant");
+          const gasFixed = read("gasFixed");
+          const hpFixed = read("hpFixed");
+          const years = read("years");
+          const rate = read("interest") / 100;
+          const values = [heat, gasEfficiency, jaz, gasPrice, electricityPrice, gasInvestment, hpInvestment, hpGrant, gasFixed, hpFixed, years, rate];
+          const inputsValid = Array.from(form.querySelectorAll("input")).every((input) => input.checkValidity());
+          const valid = inputsValid && values.every(Number.isFinite) && heat > 0 && gasEfficiency > 0 && jaz > 0 && years > 0 && values.slice(3, 10).every((value) => value >= 0);
+
+          if (!valid) {
+            document.getElementById("winner").innerHTML = "<span class=\"winner-icon\" aria-hidden=\"true\">!</span><p><strong>Bitte prüfen Sie Ihre Eingaben.</strong><span>Werte außerhalb der angegebenen Bereiche können nicht berechnet werden.</span></p>";
+            ["gasTotal", "hpTotal", "gasAnnualInvest", "hpAnnualInvest", "gasEnergyCost", "hpEnergyCost", "gasFixedCost", "hpFixedCost", "gasConsumption", "hpConsumption", "gasHeatCost", "hpHeatCost"].forEach((id) => setText(id, "–"));
+            document.getElementById("gasBar").style.width = "0%";
+            document.getElementById("hpBar").style.width = "0%";
+            setText("periodTotal", "Der Vergleich wird angezeigt, sobald alle Eingaben gültig sind.");
+            return;
+          }
+
+          const annuity = capitalRecoveryFactor(rate, years);
+          const gasUse = heat / gasEfficiency;
+          const hpUse = heat / jaz;
+          const gasAnnualInvest = gasInvestment * annuity;
+          const hpNetInvestment = Math.max(0, hpInvestment - hpGrant);
+          const hpAnnualInvest = hpNetInvestment * annuity;
+          const gasEnergy = gasUse * gasPrice;
+          const hpEnergy = hpUse * electricityPrice;
+          const gasTotal = gasAnnualInvest + gasEnergy + gasFixed;
+          const hpTotal = hpAnnualInvest + hpEnergy + hpFixed;
+          const maxTotal = Math.max(gasTotal, hpTotal, 1);
+          const gasPerKwh = gasTotal / heat * 100;
+          const hpPerKwh = hpTotal / heat * 100;
+          const difference = Math.abs(gasTotal - hpTotal);
+          const lowerName = gasTotal === hpTotal ? "Beide Systeme" : gasTotal < hpTotal ? "Gasheizung" : "Wärmepumpe";
+          const winnerText = gasTotal === hpTotal
+            ? "Beide Systeme liegen bei rund " + euro.format(gasTotal) + " pro Jahr gleichauf."
+            : lowerName + " liegt im Modell rund " + euro.format(difference) + " pro Jahr unter dem jeweils anderen System.";
+
+          setText("gasTotal", euro.format(gasTotal));
+          setText("hpTotal", euro.format(hpTotal));
+          setText("gasAnnualInvest", euro.format(gasAnnualInvest));
+          setText("hpAnnualInvest", euro.format(hpAnnualInvest));
+          setText("gasEnergyCost", euro.format(gasEnergy));
+          setText("hpEnergyCost", euro.format(hpEnergy));
+          setText("gasFixedCost", euro.format(gasFixed));
+          setText("hpFixedCost", euro.format(hpFixed));
+          setText("gasConsumption", number.format(gasUse) + " kWh/a");
+          setText("hpConsumption", number.format(hpUse) + " kWh/a");
+          setText("gasHeatCost", decimal.format(gasPerKwh) + " ct/kWh");
+          setText("hpHeatCost", decimal.format(hpPerKwh) + " ct/kWh");
+          setText("periodTotal", "Über " + number.format(years) + " Jahre ergeben sich annualisierte Vergleichskosten von " + euro.format(gasTotal * years) + " für Gas und " + euro.format(hpTotal * years) + " für die Wärmepumpe. Energiepreise und Fixkosten werden dabei als konstant angenommen.");
+          document.getElementById("gasBar").style.width = Math.max(gasTotal === 0 ? 0 : 2, gasTotal / maxTotal * 100) + "%";
+          document.getElementById("hpBar").style.width = Math.max(hpTotal === 0 ? 0 : 2, hpTotal / maxTotal * 100) + "%";
+          document.getElementById("winner").innerHTML = "<span class=\"winner-icon\" aria-hidden=\"true\">" + (gasTotal === hpTotal ? "=" : "↗") + "</span><p><strong>" + winnerText + "</strong><span>Das Ergebnis hängt von Ihren eingetragenen Preisen und Angeboten ab.</span></p>";
+        }
+
+        form.addEventListener("input", update);
+        form.addEventListener("change", update);
+        form.addEventListener("reset", () => window.setTimeout(update, 0));
+        document.getElementById("printButton").addEventListener("click", () => window.print());
+        document.getElementById("resultPrintButton").addEventListener("click", () => window.print());
+
+        const menuToggle = document.getElementById("menuToggle");
+        const navigation = document.getElementById("primaryNavigation");
+        menuToggle.addEventListener("click", () => {
+          const open = menuToggle.getAttribute("aria-expanded") !== "true";
+          menuToggle.setAttribute("aria-expanded", String(open));
+          menuToggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+          menuToggle.textContent = open ? "×" : "☰";
+          navigation.classList.toggle("is-open", open);
+        });
+        navigation.addEventListener("click", (event) => {
+          if (event.target.closest("a") && event.target.closest("a").getAttribute("href").startsWith("#")) {
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Menü öffnen");
+            menuToggle.textContent = "☰";
+            navigation.classList.remove("is-open");
+          }
+        });
+
+        update();
+      })();
+    </script>
+  </body>
+</html>
