@@ -12,6 +12,6 @@ Die Rechnerfelder werden nur im Browser verarbeitet. Es gibt kein Kontaktformula
 
 ## Vorschau
 
-Die Arbeit liegt im Branch `pages-preview` des bestehenden Repositorys. GitHub Pages wird durch diesen Branch nicht aktiviert. Eine Live-Veröffentlichung und die spätere Zuordnung der rechtlichen Angaben müssen separat abgestimmt werden.
+Die Vorschau ist unter <https://alexanderkaufi.github.io/Waermekosten/> erreichbar. GitHub Pages veröffentlicht den Stammordner des Branches `pages-preview` aus dem bestehenden Repository. Da das Repository öffentlich ist, ist auch die Website öffentlich erreichbar.
 
-Die lokale Vorschau wurde im Browser visuell geprüft: Das bereitgestellte Themenbild lädt vollständig und steht oberhalb des Seitentitels. Eine gesonderte Prüfung auf mehreren Bildschirmgrößen sowie eine fachliche Abnahme stehen noch aus; Details stehen in `design-qa.md`.
+Die separate Produktionswebsite bleibt unverändert. Die fachliche Abnahme, Prüfung weiterer Bildschirmgrößen und die Zuordnung eigener Rechtstexte für eine spätere Verwendung stehen noch aus; Details stehen in `design-qa.md`.
