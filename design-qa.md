@@ -2,14 +2,14 @@
 
 ## Ergebnis
 
-**Status: blockiert – visuelle Prüfung ausstehend.**
+**Status: lokale Browseransicht geprüft; fachliche Abnahme und Prüfung weiterer Bildschirmgrößen ausstehend.**
 
-Die angeforderte EBF-inspirierte Seite wurde mit Kontaktleiste, responsiver Navigation, dem bereitgestellten Hero-Banner, Wärmekostenrechner, FAQ und Footer umgesetzt. Eine gerenderte Desktop- oder Mobilansicht konnte hier nicht aufgenommen und mit der Referenz verglichen werden.
+Die lokale Vorschau wurde im In-App-Browser gerendert. Das von Alex bereitgestellte Themenbild lädt und wird vollständig, ohne Beschnitt, oberhalb der Überschrift angezeigt. Die Darstellung ist responsiv angelegt; eine gesonderte Prüfung auf mehreren Bildschirmgrößen wurde noch nicht vorgenommen.
 
 ## Grund
 
-Die Browserumgebung hat das Öffnen einer lokalen Datei aus Sicherheitsgründen blockiert und ausdrücklich untersagt, denselben Zugriff über einen Umweg oder eine andere Browseroberfläche herzustellen. Ich habe deshalb keine lokale Browser- oder Screenshotprüfung ausgeführt.
+Die frühere Browserprüfung war blockiert. In diesem Arbeitsschritt ließ sich die bestehende lokale Vorschau regulär im In-App-Browser öffnen und neu laden; es wurde kein Sicherheitsumweg verwendet.
 
 ## Nächster Schritt
 
-Der Entwurf liegt auf dem vom Nutzer angeforderten Branch `pages-preview`, damit Alex die Darstellung selbst im GitHub-Branch prüfen und konkrete Änderungswünsche zurückmelden kann. GitHub Pages wurde nicht aktiviert.
+Die lokale Vorschau bleibt ein Entwurf für Alex' Durchsicht. Die visuelle Prüfung ersetzt weder die fachliche Abnahme noch eine Freigabe für eine Live-Veröffentlichung. GitHub Pages wurde nicht aktiviert.

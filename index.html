@@ -46,8 +46,8 @@
       .request-link:hover { background: #507b18; color: white; }
       .menu-toggle { display: none; width: 46px; height: 42px; border: 1px solid var(--line); border-radius: 3px; background: white; color: var(--green); font-size: 23px; line-height: 1; }
       .hero { margin-top: 0; }
-      .hero-image { display: block; width: min(100% - 3rem, 1320px); aspect-ratio: 3 / 1; margin: 0 auto; overflow: hidden; border-radius: 4px; background: #edf0ec; }
-      .hero-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      .hero-image { display: block; width: min(100% - 3rem, 1320px); margin: 0 auto; overflow: hidden; border-radius: 4px; background: #edf0ec; }
+      .hero-image img { display: block; width: 100%; height: auto; }
       .article { max-width: 1160px; margin-inline: auto; }
       .intro { padding: 46px 0 35px; }
       .kicker { margin: 0 0 8px; color: var(--green-bright); font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
@@ -183,8 +183,7 @@
         .contact-strip .container { justify-content: center; gap: 14px; }
         .contact-item:last-child { display: none; }
         .container { width: min(100% - 2rem, 1320px); }
-        .hero-image { width: 100%; aspect-ratio: 3 / 1; border-radius: 0; }
-        .hero-image img { object-position: center; }
+        .hero-image { width: 100%; border-radius: 0; }
         .article { width: min(100% - 2rem, 1160px); }
         .intro { padding: 33px 0 29px; }
         .lead { font-size: 15px; }
@@ -203,7 +202,6 @@
         .brand, .brand img { width: 155px; flex-basis: 155px; }
         .primary-nav { grid-template-columns: 1fr; }
         .primary-nav a { min-height: 42px; }
-        .hero-image { aspect-ratio: 2.15 / 1; }
         .intro { padding-top: 28px; }
         h1 { font-size: 30px; }
         h2 { font-size: 26px; }
@@ -227,7 +225,6 @@
       @media print {
         .contact-strip, .site-header, .intro-actions, .form-actions, .result-actions, .contact-card, .site-footer { display: none !important; }
         .container, .article, .hero-image { width: 100%; }
-        .hero-image { aspect-ratio: 3 / 1; }
         .section { padding-block: 18px; }
         .calculator-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
         .results-panel { position: static; }
@@ -268,7 +265,7 @@
     <main>
       <section class="hero" aria-label="Wärmekostenrechner">
         <figure class="hero-image">
-          <img src="assets/waermekostenrechner-hero.png" alt="Wärmekostenrechner: Gasheizung und Wärmepumpe im Vergleich">
+          <img src="assets/themenbild-waermekosten.png" alt="Wärmekostenrechner: Gasheizung und Wärmepumpe im Vergleich">
         </figure>
       </section>
 
